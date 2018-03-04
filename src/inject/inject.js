@@ -1,3 +1,9 @@
+/**
+ * Chrome extension for automatically displaying monthly costs for a home on the oikotie.fi website.
+ *
+ * @returns {{init: function()}}
+ * @constructor
+ */
 const Oikotie = function() {
 
   const init = () => {

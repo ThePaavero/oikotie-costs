@@ -1,0 +1,9 @@
+.oikotie-computed-extra-costs-wrapper {
+    position: fixed;
+    top: 5px;
+    left: 5px;
+    background: orange;
+    color: #000;
+    padding: 20px;
+    font-size: 20px;
+}

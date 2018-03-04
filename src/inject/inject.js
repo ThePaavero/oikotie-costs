@@ -7,7 +7,11 @@
 const Oikotie = function() {
 
   const init = () => {
-    const matchTitles = ['Rahoitusvastike', 'Hoitovastike']
+    const matchTitles = [
+      'Rahoitusvastike',
+      'Hoitovastike',
+      'Vesimaksu'
+    ]
     const titleSiblings = document.querySelectorAll('.info-table__title')
     let costs = 0
     Array.from(titleSiblings).forEach(titleElement => {

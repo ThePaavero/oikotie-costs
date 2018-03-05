@@ -13,3 +13,12 @@
     font-size: 11px;
     opacity: 0.6;
 }
+
+.oikotie-chrome-extension-notification .warning {
+    background-color: red;
+    color: #fff;
+}
+
+.oikotie-chrome-extension-notification .positive {
+    background-color: greenyellow;
+}

@@ -61,11 +61,47 @@ const Oikotie = function() {
     document.body.appendChild(displayElement)
   }
 
+  const doRenovationWarnings = () => {
+    const matchTitles = [
+      'Tehdyt remontit',
+      'Tulevat remontit'
+    ]
+    const matchContentStrings = [
+      'linjasaneeraus',
+      'putkire',
+      'viemärijärjestelmän',
+      'viemärisaneeraus',
+      'runkolinjasaneerau',
+      'runkolinja',
+      'LVIS saneeraus',
+      'LVI saneeraus',
+      'LVI-saneeraus',
+      'putkien kunnostus',
+      'putkien saneerau',
+      'n kuntotutkimus',
+    ]
+    getValuesFromTitles(matchTitles, (matchedTitle, value) => {
+      console.log(matchedTitle, ' -->', value)
+      const matches = matchContentStrings.filter(needle => {
+        return value.toString().toLowerCase().indexOf(needle.toLowerCase()) > -1
+      })
+      if (matches.length < 1) {
+        return
+      }
+      if (matchedTitle === 'Tulevat remontit') {
+        notifications.push(`<span class='warning'>Putkiremppa may be incoming!</span>`)
+      } else {
+        notifications.push(`<span class='positive'>Putkiremppa probably done!</span>`)
+      }
+    })
+  }
+
   const init = () => {
     if (!document.querySelector('.listing-overview__title')) {
       return
     }
     doCostsDisplay()
+    doRenovationWarnings()
   }
 
   return {

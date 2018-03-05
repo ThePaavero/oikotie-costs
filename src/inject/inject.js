@@ -24,22 +24,27 @@ const Oikotie = function() {
     return costs
   }
 
+  const getValuesFromTitles = (titles, callback) => {
+    const titleSiblings = document.querySelectorAll('.info-table__title')
+    titleSiblings.forEach(titleElement => {
+      const index = titles.indexOf(titleElement.innerText)
+      if (index < 0) {
+        return
+      }
+      callback(titles[index], titleElement.parentNode.querySelector('.info-table__value').innerText)
+    })
+  }
+
   const doCostsDisplay = () => {
     const matchTitles = [
       'Rahoitusvastike',
       'Hoitovastike',
       'Vesimaksu'
     ]
-    const titleSiblings = document.querySelectorAll('.info-table__title')
     let costs = 0
-    Array.from(titleSiblings).forEach(titleElement => {
-      const index = matchTitles.indexOf(titleElement.innerText)
-      if (index > -1) {
-        const valueString = titleElement.parentNode.querySelector('.info-table__value').innerText.split('€')[0].replace(',', '.')
-        const add = parseFloat(valueString)
-        costs += add
-        notifications.push(matchTitles[index] + ' (' + add + ')')
-      }
+    getValuesFromTitles(matchTitles, (matchedTitle, value) => {
+      notifications.push(matchedTitle + ' (' + value + ')')
+      costs += parseInt(value.split('€')[0].replace(',', '.'))
     })
     costs = getMonthlyLoanCosts(costs)
     const displayElement = document.createElement('div')

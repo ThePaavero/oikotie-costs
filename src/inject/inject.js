@@ -1,15 +1,11 @@
 /**
  * Chrome extension for automatically displaying monthly costs for a home on the oikotie.fi website.
- *
- * @returns {{init: function()}}
- * @constructor
  */
 const Oikotie = function() {
 
   const config = {
     startMoney: 24000
   }
-
   const notifications = []
 
   const getMonthlyLoanCosts = (costs) => {
@@ -17,7 +13,6 @@ const Oikotie = function() {
     if (!calculatorResultElement) {
       return costs
     }
-    // Add our startMoney
     const savingsInput = document.querySelector('#loan-savings')
     savingsInput.click()
     savingsInput.value = config.startMoney
@@ -25,12 +20,11 @@ const Oikotie = function() {
     evt.initEvent('change', false, true)
     savingsInput.dispatchEvent(evt)
     notifications.push('Lainalaskuri applied with ' + config.startMoney + ' € own savings.')
-
     costs += parseFloat(calculatorResultElement.innerText.split('€')[0])
     return costs
   }
 
-  const init = () => {
+  const doCostsDisplay = () => {
     const matchTitles = [
       'Rahoitusvastike',
       'Hoitovastike',
@@ -42,12 +36,12 @@ const Oikotie = function() {
       const index = matchTitles.indexOf(titleElement.innerText)
       if (index > -1) {
         const valueString = titleElement.parentNode.querySelector('.info-table__value').innerText.split('€')[0].replace(',', '.')
-        costs += parseFloat(valueString)
+        const add = parseFloat(valueString)
+        costs += add
+        notifications.push(matchTitles[index] + ' (' + add + ')')
       }
     })
-
     costs = getMonthlyLoanCosts(costs)
-
     const displayElement = document.createElement('div')
     displayElement.className = 'oikotie-computed-extra-costs-wrapper'
     displayElement.innerText = parseInt(costs) + ' € / kk'
@@ -59,6 +53,10 @@ const Oikotie = function() {
       displayElement.innerHTML += `<div class='oikotie-chrome-extension-notification'>${n}</div>`
     })
     document.body.appendChild(displayElement)
+  }
+
+  const init = () => {
+    doCostsDisplay()
   }
 
   return {

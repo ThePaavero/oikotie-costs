@@ -8,3 +8,8 @@
     padding: 20px;
     font-size: 20px;
 }
+
+.oikotie-chrome-extension-notification {
+    font-size: 11px;
+    opacity: 0.6;
+}

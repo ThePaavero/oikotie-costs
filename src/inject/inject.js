@@ -6,6 +6,30 @@
  */
 const Oikotie = function() {
 
+  const config = {
+    startMoney: 24000
+  }
+
+  const notifications = []
+
+  const getMonthlyLoanCosts = (costs) => {
+    const calculatorResultElement = document.querySelector('.listing-sidepanel-calculator h2')
+    if (!calculatorResultElement) {
+      return costs
+    }
+    // Add our startMoney
+    const savingsInput = document.querySelector('#loan-savings')
+    savingsInput.click()
+    savingsInput.value = config.startMoney
+    const evt = document.createEvent('HTMLEvents')
+    evt.initEvent('change', false, true)
+    savingsInput.dispatchEvent(evt)
+    notifications.push('Lainalaskuri applied with ' + config.startMoney + ' € own savings.')
+
+    costs += parseFloat(calculatorResultElement.innerText.split('€')[0])
+    return costs
+  }
+
   const init = () => {
     const matchTitles = [
       'Rahoitusvastike',
@@ -22,17 +46,17 @@ const Oikotie = function() {
       }
     })
 
-    const calculatorResultElement = document.querySelector('.listing-sidepanel-calculator h2')
-    if (calculatorResultElement) {
-      costs += parseFloat(calculatorResultElement.innerText.split('€')[0])
-    }
+    costs = getMonthlyLoanCosts(costs)
 
     const displayElement = document.createElement('div')
     displayElement.className = 'oikotie-computed-extra-costs-wrapper'
-    displayElement.innerText = costs + ' € / kk'
+    displayElement.innerText = parseInt(costs) + ' € / kk'
     displayElement.addEventListener('click', e => {
       displayElement.remove()
       init()
+    })
+    notifications.forEach(n => {
+      displayElement.innerHTML += `<div class='oikotie-chrome-extension-notification'>${n}</div>`
     })
     document.body.appendChild(displayElement)
   }

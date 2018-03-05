@@ -12,13 +12,20 @@
 .oikotie-chrome-extension-notification {
     font-size: 11px;
     opacity: 0.6;
+    margin-bottom: 5px;
+}
+
+.oikotie-chrome-extension-notification:last-child {
+    margin-bottom: 0;
 }
 
 .oikotie-chrome-extension-notification .warning {
     background-color: red;
     color: #fff;
+    padding: 4px;
 }
 
 .oikotie-chrome-extension-notification .positive {
     background-color: greenyellow;
+    padding: 4px;
 }

@@ -35,30 +35,17 @@ const Oikotie = function() {
     })
   }
 
-  const doCostsDisplay = () => {
+  const doCostsDisplay = (costs) => {
     const matchTitles = [
       'Rahoitusvastike',
       'Hoitovastike',
       'Vesimaksu'
     ]
-    let costs = 0
     getValuesFromTitles(matchTitles, (matchedTitle, value) => {
       notifications.push(matchedTitle + ' (' + value + ')')
       costs += parseInt(value.split('€')[0].replace(',', '.'))
     })
-    costs = getMonthlyLoanCosts(costs)
-    const displayElement = document.createElement('div')
-    displayElement.className = 'oikotie-computed-extra-costs-wrapper'
-    displayElement.innerText = parseInt(costs) + ' € / kk'
-    displayElement.addEventListener('click', e => {
-      notifications.length = 0
-      document.body.removeChild(displayElement)
-      init()
-    })
-    notifications.forEach(n => {
-      displayElement.innerHTML += `<div class='oikotie-chrome-extension-notification'>${n}</div>`
-    })
-    document.body.appendChild(displayElement)
+    return getMonthlyLoanCosts(costs)
   }
 
   const doRenovationWarnings = () => {
@@ -81,13 +68,14 @@ const Oikotie = function() {
       'n kuntotutkimus',
     ]
     getValuesFromTitles(matchTitles, (matchedTitle, value) => {
-      console.log(matchedTitle, ' -->', value)
       const matches = matchContentStrings.filter(needle => {
-        return value.toString().toLowerCase().indexOf(needle.toLowerCase()) > -1
+        // console.log(needle, '-->', value.toLowerCase())
+        return value.toLowerCase().indexOf(needle.toLowerCase()) > -1
       })
       if (matches.length < 1) {
         return
       }
+      console.log('Match: ', matchedTitle)
       if (matchedTitle === 'Tulevat remontit') {
         notifications.push(`<span class='warning'>Putkiremppa may be incoming!</span>`)
       } else {
@@ -100,8 +88,21 @@ const Oikotie = function() {
     if (!document.querySelector('.listing-overview__title')) {
       return
     }
-    doCostsDisplay()
+    costs = doCostsDisplay(0)
     doRenovationWarnings()
+
+    const displayElement = document.createElement('div')
+    displayElement.className = 'oikotie-computed-extra-costs-wrapper'
+    displayElement.innerText = parseInt(costs) + ' € / kk'
+    displayElement.addEventListener('click', e => {
+      notifications.length = 0
+      document.body.removeChild(displayElement)
+      init()
+    })
+    notifications.forEach(n => {
+      displayElement.innerHTML += `<div class='oikotie-chrome-extension-notification'>${n}</div>`
+    })
+    document.body.appendChild(displayElement)
   }
 
   return {

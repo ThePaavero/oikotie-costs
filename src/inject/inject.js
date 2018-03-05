@@ -56,6 +56,9 @@ const Oikotie = function() {
   }
 
   const init = () => {
+    if (!document.querySelector('.listing-overview__title')) {
+      return
+    }
     doCostsDisplay()
   }
 

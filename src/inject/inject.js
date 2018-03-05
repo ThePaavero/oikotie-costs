@@ -69,17 +69,23 @@ const Oikotie = function() {
     ]
     getValuesFromTitles(matchTitles, (matchedTitle, value) => {
       const matches = matchContentStrings.filter(needle => {
-        // console.log(needle, '-->', value.toLowerCase())
         return value.toLowerCase().indexOf(needle.toLowerCase()) > -1
       })
       if (matches.length < 1) {
         return
       }
-      console.log('Match: ', matchedTitle)
       if (matchedTitle === 'Tulevat remontit') {
         notifications.push(`<span class='warning'>Putkiremppa may be incoming!</span>`)
       } else {
         notifications.push(`<span class='positive'>Putkiremppa probably done!</span>`)
+      }
+    })
+  }
+
+  const doCrappyConditionWarnings = () => {
+    getValuesFromTitles(['Kunto'], (matchedTitle, value) => {
+      if (value === 'Tyydyttävä') {
+        notifications.push(`<span class='warning'>Probably a dump...</span>`)
       }
     })
   }
@@ -90,6 +96,7 @@ const Oikotie = function() {
     }
     costs = doCostsDisplay(0)
     doRenovationWarnings()
+    doCrappyConditionWarnings()
 
     const displayElement = document.createElement('div')
     displayElement.className = 'oikotie-computed-extra-costs-wrapper'

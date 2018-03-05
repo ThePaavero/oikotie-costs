@@ -51,7 +51,8 @@ const Oikotie = function() {
     displayElement.className = 'oikotie-computed-extra-costs-wrapper'
     displayElement.innerText = parseInt(costs) + ' € / kk'
     displayElement.addEventListener('click', e => {
-      displayElement.remove()
+      notifications.length = 0
+      document.body.removeChild(displayElement)
       init()
     })
     notifications.forEach(n => {
